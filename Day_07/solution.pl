@@ -10,7 +10,6 @@ use experimental 'signatures';
 use experimental 'lexical_subs';
 
 @ARGV = "input" unless @ARGV;
-# @ARGV = "example-1";
 
 my @dirs;  # List of directories from top to current directory
 my %size;  # Size of each directory.
@@ -28,12 +27,6 @@ use List::Util qw [sum];
 #
 
 while (<>) {
-    #
-    # We can skip any lines starting with '$ ls' and 'dir', as we
-    # do not need to do anything.
-    #
-    next if /^\$ ls/ || /^dir/;
-
     #
     # Handle changing directories. We use a stack to keep track of
     # which directory we are currently in, with parent directories
