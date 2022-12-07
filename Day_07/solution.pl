@@ -38,7 +38,7 @@ while (<>) {
         else                 {push @dirs => $dirs [-1] . "/" . $dir}
     }
 
-    if (my ($size, $file) = /^([0-9]+)\s+(.*)/) {
+    if (my ($size) = /^([0-9]+)/) {
         #
         # Add the file size to the directory total, and all its
         # parent directories.
