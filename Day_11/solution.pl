@@ -59,15 +59,15 @@ sub parse_monkey ($input, $modulo = undef) {
             }
             next;
         }
-    if ($key =~ /Test/) {
-       ($$monkey {$TEST}) = $value =~ /divisible by ([0-9]+)/ or die;
-       next;
-    }
-    if ($key =~ /If \s+ (true|false)/x) {
-       my $key = $1 eq "true" ? $TRUE : $FALSE;
-       ($$monkey {$key}) = $value =~ /throw to monkey ([0-9]+)/ or die;
-       next;
-    }
+        if ($key =~ /Test/) {
+           ($$monkey {$TEST}) = $value =~ /divisible by ([0-9]+)/ or die;
+           next;
+        }
+        if ($key =~ /If \s+ (true|false)/x) {
+           my $key = $1 eq "true" ? $TRUE : $FALSE;
+           ($$monkey {$key}) = $value =~ /throw to monkey ([0-9]+)/ or die;
+           next;
+        }
         die "Failed to parse $line";
     }
     $$monkey {$INSPECTS} = 0;
