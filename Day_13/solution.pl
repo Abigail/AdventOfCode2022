@@ -9,17 +9,14 @@ no  warnings 'syntax';
 use experimental 'signatures';
 use experimental 'lexical_subs';
 
-use List::Util qw [sum];
+use List::Util qw [sum product];
 
 @ARGV = "input" unless @ARGV;
-# @ARGV = "example-1";
 
 #
 # Read in the data, eval it to make it nested lists.
 #
 my @packets = map {eval} grep {/^[][0-9,]+$/} <>;
-
-my $score1 = 0;
 
 sub compare ($first, $second) {
     return $first <=> $second            if !ref ($first) && !ref ($second);
@@ -37,3 +34,13 @@ say "Solution 1: ", sum map  {1 + $_ / 2}
                     grep {compare ($packets [$_], $packets [$_ + 1]) < 0}
                     grep {$_ % 2 == 0}
                     keys @packets;
+
+
+my @sorted = sort {compare ($$a [1], $$b [1])} [1, [[2]]], [1, [[6]]], 
+                                               map {[0 => $_]} @packets;
+
+say "Solution 2: ", product map  {$_ + 1} 
+                            grep {$sorted [$_] [0]} keys @sorted;
+
+
+__END__
