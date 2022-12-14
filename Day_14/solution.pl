@@ -21,14 +21,10 @@ my $map     = {};   # Track rocks and sand
 # Mark the map with rock, given the endpoints of a line segment
 #
 sub map_rock ($from, $to, $map) {
-    if ($$from [$X] == $$to [$X]) {
-        $$map {$$from [$X]} {$_} = 1 for min ($$from [$Y], $$to [$Y]) .. 
-                                         max ($$from [$Y], $$to [$Y]);
-    }
-    else {
-        $$map {$_} {$$from [$Y]} = 1 for min ($$from [$X], $$to [$X]) .. 
-                                         max ($$from [$X], $$to [$X]);
-    }
+    $$map {$$from [$X]} {$_} = 1 for min ($$from [$Y], $$to [$Y]) .. 
+                                     max ($$from [$Y], $$to [$Y]);
+    $$map {$_} {$$from [$Y]} = 1 for min ($$from [$X], $$to [$X]) .. 
+                                     max ($$from [$X], $$to [$X]);
 }
 
 #
@@ -40,15 +36,11 @@ sub drop ($drop, $map, $FLOOR) {
     my ($x, $y) = @$drop;
     DROP: {
         last if $y >= $FLOOR - 1;
-        for my $dx (0, -1, 1) {
-            if (!$$map {$x + $dx} {$y + 1}) {
-                ($x, $y) = ($x + $dx, $y + 1);
-                redo DROP;
-            }
-        }
+        $$map {$x + $_} {$y + 1} or ($x, $y) = ($x + $_, $y + 1) and redo DROP
+            for 0, -1, 1;
     }
     $$map {$x} {$y} = 1;
-    return $y;
+    $y;
 }
 
 
@@ -57,9 +49,7 @@ sub drop ($drop, $map, $FLOOR) {
 #
 while (<>) {
     my @points = map {[split /,/]} split /\s*->\s*/;
-    for (my $i = 1; $i < @points; $i ++) {
-        map_rock $points [$i - 1], $points [$i], $map;
-    }
+    $_ and map_rock $points [$_ - 1], $points [$_], $map for keys @points;
 }
 
 #
