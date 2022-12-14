@@ -62,15 +62,10 @@ my $FLOOR = $ABYSS + 2;
 my $score_1;
 my $score_2;
 
-while (1) {
-    state $units = 0;
+for (my $units = 0;; $units ++) {
     my $y = drop $DROP, $map, $FLOOR;
-    $score_1 ||= $units if $y >= $ABYSS;
-    $units ++;
-    if ($$map {$$DROP [$X]} {$$DROP [$Y]}) {
-        $score_2 = $units;
-        last;
-    }
+    $score_1 ||= $units              if $y >= $ABYSS;
+    $score_2   = $units + 1 and last if $$map {$$DROP [$X]} {$$DROP [$Y]};
 }
 
 
