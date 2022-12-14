@@ -35,10 +35,9 @@ sub map_rock ($from, $to, $map) {
 sub drop ($drop, $map, $FLOOR) {
     my ($x, $y) = @$drop;
     DROP: {
-        $y >= $FLOOR - 1                 or
-            $$map {$x + $_} {$y + 1}     or
-            ($x, $y) = ($x + $_, $y + 1) and redo DROP
-                for 0, -1, 1;
+        last if $y >= $FLOOR - 1;
+        $$map {$x + $_} {$y + 1} or ($x, $y) = ($x + $_, $y + 1) and redo DROP
+            for 0, -1, 1;
     }
     $$map {$x} {$y} = 1;
     $y;
@@ -48,10 +47,10 @@ sub drop ($drop, $map, $FLOOR) {
 #
 # Read in the data, drop the rocks on the map
 #
-    while (<>) {
-        my @points = map {[split /,/]} split /\s*->\s*/;
-        $_ and map_rock $points [$_ - 1], $points [$_], $map for keys @points;
-    }
+while (<>) {
+    my @points = map {[split /,/]} split /\s*->\s*/;
+    $_ and map_rock $points [$_ - 1], $points [$_], $map for keys @points;
+}
 
 #
 # The "ABYSS" is the lowest level for which there is rock.
