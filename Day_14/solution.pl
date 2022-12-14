@@ -63,8 +63,7 @@ my $score_1;
 my $score_2;
 
 for (my $units = 0;; $units ++) {
-    my $y = drop $DROP, $map, $FLOOR;
-    $score_1 ||= $units              if $y >= $ABYSS;
+    $score_1 ||= $units              if drop ($DROP, $map, $FLOOR) >= $ABYSS;
     $score_2   = $units + 1 and last if $$map {$$DROP [$X]} {$$DROP [$Y]};
 }
 
